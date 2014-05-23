@@ -1,0 +1,50 @@
+body{
+    font: 300 1em 'Open Sans';
+    margin: 0;
+    padding: 0;
+    color: #888;
+}
+
+#map_container{
+    /*this rule cannot have padding or margin*/
+    width: 60%;
+    min-height: 10em ;
+    /*background-color: red ;*/
+    float: left;
+
+}
+
+#info_container{
+    /*this rule cannot have padding or margin*/
+    width: 40%;
+    min-height: 10em;
+    /*background-color: green;*/
+    float: left;
+}
+
+#state_info,#weather_info{
+    padding: 1em;
+
+}
+
+#map_padder{
+    padding: 1em;
+}
+
+span.state_info{
+    padding: 0.25em 0.5em;
+    display: inline-block;
+    margin: 0.15em;
+    background-color: #efefef;
+}
+
+span.state_info_caption{
+    display: inline-block;
+    font-size: 0.85em;
+    margin-right: 0.15em;
+
+}
+
+span.state_info_value{
+    display: inline-block;
+}

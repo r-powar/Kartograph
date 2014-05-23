@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Kartograph</title>
+    <script src="js/States.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/raphael.js"></script>
+    <script src="js/kartograph.js"></script>
+    <link rel="stylesheet" href="bower_components/open-sans-fontface/open-sans.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script>
+        //console.log(states);
+
+        var weathercache ={};
+        $(function(){
+
+
+            var map = $K.map('#map');
+
+            map.loadMap('usa.svg', function(){
+                map.addLayer('layer0', {
+                    styles: {
+                        stroke: '#bbb',
+                        fill: '#ddd'
+                    },
+                    mouseenter: function(d, path){
+                        //console.log(d);
+                        //console.log(path);
+                    },
+                    click: function(d, path){
+                        console.log('click..')
+                        //console.log(d);
+                        //console.log(path);
+
+
+                        var capital_info_div = $('#state_info');
+                        show_capital_info(d.key,capital_info_div,path);
+
+
+                    }
+                });
+            });
+        });
+
+        function show_capital_info(stateCode,div,path){
+            div.html(' ');
+            var info = states[stateCode];
+            for (var prop in info){
+                var span_info = $('<span>').addClass('state_info').appendTo(div);
+                $('<span>').addClass('state_info_caption').html(prop).appendTo(span_info);
+                $('<span>').addClass('state_info_value').html(info[prop]).appendTo(span_info);
+
+
+            }
+
+            getweather(info.capital,path);
+
+        }
+
+        function getweather(cityname,path){
+
+//            for(var prop in weathercache){
+//                weathercache[prop].path.attr('fill','#dedede');
+//            }
+            path.attr('fill','red');
+
+            cityname= encodeURIComponent(cityname);
+            if(cityname in weathercache){
+                console.log(weathercache[cityname].weatherData);
+            }else {
+                $.getJSON ('http://api.openweathermap.org/data/2.5/weather?q=' + cityname + ',us', function (data) {
+                   //console.log(data);
+                   //console.log(data.weather[0].description);
+                    $('#weather_info').html('The weather is: ' + data.weather[0].description);
+                   weathercache[cityname] = {
+                       weatherData: data,
+                       path: path
+                   }
+
+                   for(var prop in weathercache){
+                        weathercache[prop].path.attr('fill','#dedede');
+                    }
+
+
+                });
+            }
+        }
+
+
+    </script>
+
+</head>
+<body>
+<div id="map_container">
+    <div id="map_padder">
+        <div id="map">
+
+        </div>
+    </div>
+
+</div>
+
+<div id="info_container">
+    <div id="state_info">
+    Capital
+    </div>
+    <div id="weather_info">
+    Click to get Weather...
+    </div>
+</div>
+</body>
+</html>
